@@ -4,6 +4,7 @@ import api from '../services/api'
 import Logo from '../components/Logo'
 import InputField from '../components/InputField'
 import { UserIcon, MailIcon, IdIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/icons'
+import styles from './Cadastro.module.css'
 
 export default function Cadastro() {
   const navigate = useNavigate()
@@ -34,18 +35,18 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#EEF2FF] px-4 py-10">
-      <div className="w-full max-w-md">
+    <div className={styles.page}>
+      <div className={styles.container}>
         {/* Cabeçalho */}
-        <div className="mb-8 flex flex-col items-center text-center">
+        <div className={styles.header}>
           <Logo size="md" />
-          <h1 className="mt-4 text-3xl font-bold text-gray-900">ShirtStore</h1>
-          <p className="mt-1 text-gray-500">Crie sua conta</p>
+          <h1 className={styles.title}>ShirtStore</h1>
+          <p className={styles.subtitle}>Crie sua conta</p>
         </div>
 
         {/* Card */}
-        <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-lg">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className={styles.card}>
+          <form onSubmit={handleSubmit} className={styles.form}>
             <InputField
               id="nome"
               type="text"
@@ -99,34 +100,30 @@ export default function Cadastro() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="text-gray-400 transition hover:text-gray-600"
+                    className={styles.toggle}
                     aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   >
                     {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                   </button>
                 }
               />
-              <p className="mt-1.5 text-sm text-gray-500">Mínimo de 8 caracteres</p>
+              <p className={styles.hint}>Mínimo de 8 caracteres</p>
             </div>
 
             {error && (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600" role="alert">
+              <p className={styles.error} role="alert">
                 {error}
               </p>
             )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-gradient-to-r from-[#7B4FDB] to-[#E040A0] py-3 font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-            >
+            <button type="submit" disabled={loading} className={styles.submit}>
               {loading ? 'Criando conta...' : 'Criar Conta'}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className={styles.signup}>
             Já tem uma conta?{' '}
-            <Link to="/login" className="font-semibold text-[#7B4FDB] hover:underline">
+            <Link to="/login" className={styles.signupLink}>
               Faça login
             </Link>
           </p>

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../../context/AuthContext'
 
 // Protege rotas autenticadas. Com requireAdmin, exige role === 'admin'.
 export default function PrivateRoute({ children, requireAdmin = false }) {

@@ -1,0 +1,66 @@
+.page {
+  min-height: 100vh;
+  background-color: #E5E7EB;
+}
+
+.main {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 48rem;            /* max-w-3xl */
+  padding: 2rem 1rem;          /* py-8 px-4 */
+}
+
+/* Cabeçalho — ícone + título lado a lado */
+.header {
+  margin-bottom: 1.5rem;       /* mb-6 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;                 /* gap-2 */
+}
+
+.titleIcon {
+  color: #7B4FDB;
+}
+
+.heading {
+  font-size: 1.5rem;           /* text-2xl */
+  line-height: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Card administrativo */
+.card {
+  border-radius: 0.75rem;      /* rounded-xl */
+  border: 1px solid #f3f4f6;   /* border-gray-100 */
+  background-color: #ffffff;
+  padding: 1.5rem;             /* p-6 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-lg */
+}
+
+.cardTitle {
+  font-size: 1.125rem;         /* text-lg */
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.cardText {
+  margin-top: 0.25rem;         /* mt-1 */
+  font-size: 0.875rem;         /* text-sm */
+  line-height: 1.25rem;
+  color: #6b7280;              /* text-gray-500 */
+}
+
+.backLink {
+  margin-top: 1rem;            /* mt-4 */
+  display: inline-block;
+  font-size: 0.875rem;         /* text-sm */
+  line-height: 1.25rem;
+  font-weight: 500;            /* font-medium */
+  color: #7B4FDB;
+}
+
+.backLink:hover {
+  text-decoration: underline;  /* hover:underline */
+}

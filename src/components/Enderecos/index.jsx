@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import api from '../services/api'
-import InputField from './InputField'
-import { MapPinIcon, HashIcon, TrashIcon, PencilIcon } from './icons'
+import api from '../../services/api'
+import InputField from '../InputField'
+import { MapPinIcon, HashIcon, TrashIcon, PencilIcon } from '../icons'
+import styles from './Enderecos.module.css'
 
 const EMPTY_FORM = { nome: '', cep: '', rua: '', numero: '', complemento: '' }
 
@@ -142,11 +143,9 @@ export default function Enderecos() {
 
   return (
     <div>
-      {editingId != null && (
-        <p className="mb-4 text-sm font-medium text-gray-500">Editando endereço</p>
-      )}
+      {editingId != null && <p className={styles.editing}>Editando endereço</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className={styles.form}>
         <InputField
           id="end-nome"
           label="Nome do endereço"
@@ -168,8 +167,8 @@ export default function Enderecos() {
             onChange={(e) => setField('cep', e.target.value)}
             required
           />
-          {cepLoading && <p className="mt-1.5 text-sm text-gray-500">Buscando CEP...</p>}
-          {cepError && <p className="mt-1.5 text-sm text-red-600">{cepError}</p>}
+          {cepLoading && <p className={styles.hint}>Buscando CEP...</p>}
+          {cepError && <p className={styles.hintError}>{cepError}</p>}
         </div>
 
         <InputField
@@ -183,7 +182,7 @@ export default function Enderecos() {
           required
         />
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className={styles.grid2}>
           <InputField
             id="end-numero"
             label="Número (opcional)"
@@ -204,25 +203,17 @@ export default function Enderecos() {
         </div>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600" role="alert">
+          <p className={styles.error} role="alert">
             {error}
           </p>
         )}
 
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-lg bg-gradient-to-r from-[#7B4FDB] to-[#E040A0] px-5 py-2.5 font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-          >
+        <div className={styles.actions}>
+          <button type="submit" disabled={saving} className={styles.submit}>
             {saving ? 'Salvando...' : editingId != null ? 'Salvar alterações' : 'Adicionar endereço'}
           </button>
           {editingId != null && (
-            <button
-              type="button"
-              onClick={resetForm}
-              className="rounded-lg px-4 py-2.5 font-medium text-gray-600 transition hover:bg-gray-100"
-            >
+            <button type="button" onClick={resetForm} className={styles.cancel}>
               Cancelar
             </button>
           )}
@@ -230,30 +221,27 @@ export default function Enderecos() {
       </form>
 
       {/* Lista de endereços cadastrados */}
-      <div className="mt-6 border-t border-gray-100 pt-6">
+      <div className={styles.list}>
         {enderecos.length === 0 ? (
-          <p className="text-sm text-gray-500">Nenhum endereço cadastrado.</p>
+          <p className={styles.empty}>Nenhum endereço cadastrado.</p>
         ) : (
-          <ul className="space-y-3">
+          <ul className={styles.items}>
             {enderecos.map((end) => (
-              <li
-                key={end.id}
-                className="flex items-start justify-between gap-4 rounded-lg border border-gray-100 p-4"
-              >
+              <li key={end.id} className={styles.item}>
                 <div>
-                  <p className="font-semibold text-gray-900">{end.nome}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className={styles.itemName}>{end.nome}</p>
+                  <p className={styles.itemDetail}>
                     {end.rua}
                     {end.numero != null ? `, ${end.numero}` : ''}
                     {end.complemento ? ` — ${end.complemento}` : ''}
                   </p>
-                  <p className="text-sm text-gray-400">CEP: {end.cep}</p>
+                  <p className={styles.itemCep}>CEP: {end.cep}</p>
                 </div>
-                <div className="flex shrink-0 gap-2">
+                <div className={styles.itemActions}>
                   <button
                     type="button"
                     onClick={() => handleEdit(end)}
-                    className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-[#7B4FDB] transition hover:bg-[#7B4FDB]/10"
+                    className={styles.editBtn}
                     aria-label={`Editar ${end.nome}`}
                   >
                     <PencilIcon /> Editar
@@ -261,7 +249,7 @@ export default function Enderecos() {
                   <button
                     type="button"
                     onClick={() => handleDelete(end.id)}
-                    className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                    className={styles.deleteBtn}
                     aria-label={`Excluir ${end.nome}`}
                   >
                     <TrashIcon /> Excluir

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import Logo from '../components/Logo'
 import InputField from '../components/InputField'
 import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/icons'
+import styles from './Login.module.css'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -36,24 +37,24 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#EEF2FF] px-4 py-10">
-      <div className="w-full max-w-md">
+    <div className={styles.page}>
+      <div className={styles.container}>
         {/* Cabeçalho */}
-        <div className="mb-8 flex flex-col items-center text-center">
+        <div className={styles.header}>
           <Logo size="md" />
-          <h1 className="mt-4 text-3xl font-bold text-gray-900">ShirtStore</h1>
-          <p className="mt-1 text-gray-500">Entre na sua conta</p>
+          <h1 className={styles.title}>ShirtStore</h1>
+          <p className={styles.subtitle}>Entre na sua conta</p>
         </div>
 
         {/* Card */}
-        <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-lg">
+        <div className={styles.card}>
           {success && (
-            <p className="mb-5 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700" role="status">
+            <p className={styles.success} role="status">
               {success}
             </p>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className={styles.form}>
             <InputField
               id="email"
               type="email"
@@ -80,7 +81,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="text-gray-400 transition hover:text-gray-600"
+                  className={styles.toggle}
                   aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                 >
                   {showPassword ? <EyeOffIcon /> : <EyeIcon />}
@@ -88,45 +89,41 @@ export default function Login() {
               }
             />
 
-            <div className="flex items-center justify-between">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+            <div className={styles.options}>
+              <label className={styles.remember}>
                 <input
                   type="checkbox"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 accent-[#7B4FDB]"
+                  className={styles.checkbox}
                 />
                 Lembrar-me
               </label>
-              <a href="#" className="text-sm font-medium text-[#7B4FDB] hover:underline">
+              <a href="#" className={styles.forgot}>
                 Esqueceu a senha?
               </a>
             </div>
 
             {error && (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600" role="alert">
+              <p className={styles.error} role="alert">
                 {error}
               </p>
             )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-lg bg-gradient-to-r from-[#7B4FDB] to-[#E040A0] py-3 font-semibold text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
-            >
+            <button type="submit" disabled={loading} className={styles.submit}>
               {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className={styles.signup}>
             Não tem uma conta?{' '}
-            <Link to="/cadastro" className="font-semibold text-[#7B4FDB] hover:underline">
+            <Link to="/cadastro" className={styles.signupLink}>
               Cadastre-se
             </Link>
           </p>
         </div>
 
-        <p className="mt-6 text-center text-sm text-gray-400">
+        <p className={styles.terms}>
           Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade
         </p>
       </div>

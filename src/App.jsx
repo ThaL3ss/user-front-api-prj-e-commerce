@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Cadastro from './pages/Cadastro'
 import Perfil from './pages/Perfil'
 import PerfilAdmin from './pages/PerfilAdmin'
+import PaginaProduto from './pages/PaginaProduto'
 import PrivateRoute from './components/PrivateRoute'
 
 export default function App() {
@@ -18,6 +19,16 @@ export default function App() {
         element={
           <PrivateRoute>
             <Perfil />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Página de produto com avaliações */}
+      <Route
+        path="/produto/:id"
+        element={
+          <PrivateRoute>
+            <PaginaProduto />
           </PrivateRoute>
         }
       />

@@ -1,7 +1,14 @@
 /* Navbar das telas autenticadas. */
 .header {
-  background-color: #ffffff;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);   /* shadow-sm */
+  height: 72px;
+  padding: 0 40px;
+  background: rgba(12, 14, 16, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Faixa superior: logo + título + ajuda */
@@ -18,14 +25,7 @@
 }
 
 .title {
-  pointer-events: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%); /* -translate-x-1/2 */
-  font-size: 1rem;             /* text-base */
-  line-height: 1.5rem;
-  font-weight: 700;
-  color: #111827;              /* text-gray-900 */
+  color: #fff;
 }
 
 .iconButton {
@@ -121,4 +121,9 @@
 
 .logoutButton:hover {
   color: #dc2626;              /* red-600 */
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
 }

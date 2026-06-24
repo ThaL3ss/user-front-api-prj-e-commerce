@@ -1,27 +1,20 @@
 import styles from './InputField.module.css'
 
-// Campo de formulário com label, ícone à esquerda e ação opcional à direita
-// (ex.: botão mostrar/ocultar senha). Reutilizável nas telas de auth.
-export default function InputField({ label, icon, trailing, id, className = '', ...inputProps }) {
+export default function InputField({ label, icon, rightIcon, error, full = true, className = '', ...props
+}) {
   return (
-    <div className={className}>
-      {label && (
-        <label htmlFor={id} className={styles.label}>
-          {label}
-        </label>
-      )}
+    <div className={`${styles.group} ${full ? styles.full : ''} ${className}`}>
+      {label && <label className={styles.label}>{label}</label>}
 
-      <div className={styles.wrap}>
+      <div className={`${styles.inputBox} ${error ? styles.error : ''}`}>
         {icon && <span className={styles.icon}>{icon}</span>}
 
-        <input
-          id={id}
-          className={`${styles.input} ${icon ? styles.hasIcon : ''} ${trailing ? styles.hasTrailing : ''}`.trim()}
-          {...inputProps}
-        />
+        <input className={styles.input} {...props} />
 
-        {trailing && <span className={styles.trailing}>{trailing}</span>}
+        {rightIcon && <span className={styles.rightIcon}>{rightIcon}</span>}
       </div>
+
+      {error && <span className={styles.errorText}>{error}</span>}
     </div>
   )
 }

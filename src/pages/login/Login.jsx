@@ -1,132 +1,167 @@
 import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import Logo from '../../assets/Logo_ShirtStore.svg'
 import InputField from '../../components/shared/Commons/InputField/InputField'
-import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
+import ButtonPrimary from '../../components/shared/Commons/Buttons/Buttons_Primary'
+import { EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
+import { loginInputPresets } from '../../data/Inputs/InputField_Login.data'
+import { buttonPresets } from '../../data/Buttons/Button_Primary.data'
+import Toast from '../../components/shared/Commons/Toasts/Toast'
+import { getToastPreset } from '../../data/Toasts/Toast.data'
 import styles from './Login.module.css'
 
 export default function Login() {
   const navigate = useNavigate()
-  const location = useLocation()
   const { login } = useAuth()
 
-  // Mensagem de sucesso vinda do cadastro (navigate('/login', { state: { success } })).
-  const [success, setSuccess] = useState(location.state?.success ?? '')
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
+  const [form, setForm] = useState({
+    email: '',
+    senha: '',
+  })
+
   const [showPassword, setShowPassword] = useState(false)
-  const [remember, setRemember] = useState(false)
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setError('')
-    setSuccess('')
-    setLoading(true)
+  function handleChange(event) {
+    const { name, value } = event.target
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+
     try {
-      await login(email, senha)
+      setLoading(true)
+
+      await login(form.email, form.senha)
+
       navigate('/perfil')
-    } catch {
-      // Mensagem genérica — nunca detalhar o que falhou.
-      setError('Não foi possível entrar. Verifique suas credenciais e tente novamente.')
+    } catch (error) {
+      console.error(error)
+      const preset =
+        getToastPreset('login-error')
+
+      setToast({
+        visible: true,
+        ...preset,
+      })
     } finally {
       setLoading(false)
     }
   }
 
+  const loginButton = buttonPresets.filter(
+    (button) => button.id === 'login-submit'
+  )
+
+  const [toast, setToast] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: '',
+  })
+
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        {/* Cabeçalho */}
+    <main className={styles.page}>
+      <section className={styles.container}>
         <div className={styles.header}>
           <img src={Logo} alt="ShirtStore" className={styles.logo} />
+
           <h1 className={styles.title}>ShirtStore</h1>
           <p className={styles.subtitle}>Entre na sua conta</p>
         </div>
 
-        {/* Card */}
-        <div className={styles.card}>
-          {success && (
-            <p className={styles.success} role="status">
-              {success}
-            </p>
-          )}
-
-          <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {loginInputPresets.map((input) => (
             <InputField
-              id="email"
-              type="email"
-              label="Email"
-              placeholder="seu@email.com"
-              icon={<MailIcon />}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-
-            <InputField
-              id="senha"
-              type={showPassword ? 'text' : 'password'}
-              label="Senha"
-              placeholder="••••••••"
-              icon={<LockIcon />}
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              autoComplete="current-password"
-              required
-              trailing={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className={styles.toggle}
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                >
-                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                </button>
+              key={input.id}
+              label={input.label}
+              name={input.name}
+              type={
+                input.id === 'senha'
+                  ? showPassword
+                    ? 'text'
+                    : 'password'
+                  : input.type
               }
+              placeholder={input.placeholder}
+              icon={input.icon}
+              rightIcon={
+                input.id === 'senha' ? (
+                  <button
+                    type="button"
+                    className={styles.eyeButton}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                ) : null
+              }
+              value={form[input.name]}
+              onChange={handleChange}
             />
+          ))}
 
-            <div className={styles.options}>
-              <label className={styles.remember}>
-                <input
-                  type="checkbox"
-                  checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
-                  className={styles.checkbox}
-                />
-                Lembrar-me
-              </label>
-              <a href="#" className={styles.forgot}>
-                Esqueceu a senha?
-              </a>
-            </div>
+          <div className={styles.options}>
+            <label className={styles.rememberLabel}>
+              <input type="checkbox" />
+              <span>Lembrar-me</span>
+            </label>
 
-            {error && (
-              <p className={styles.error} role="alert">
-                {error}
-              </p>
-            )}
+            <Link to="/recuperar-senha" className={styles.forgotPassword}>
+              Esqueceu a senha?
+            </Link>
+          </div>
 
-            <button type="submit" disabled={loading} className={styles.submit}>
-              {loading ? 'Entrando...' : 'Entrar'}
-            </button>
-          </form>
+          {loginButton.map((button) => (
+            <ButtonPrimary
+              key={button.id}
+              type="submit"
+              variant={button.variant}
+              size={button.size}
+              full={button.full}
+              disabled={loading}
+            >
+              {loading ? 'Entrando...' : button.text}
+            </ButtonPrimary>
+          ))}
 
-          <p className={styles.signup}>
+          <p className={styles.registerText}>
             Não tem uma conta?{' '}
-            <Link to="/cadastro" className={styles.signupLink}>
+            <Link to="/cadastro" className={styles.registerLink}>
               Cadastre-se
             </Link>
           </p>
-        </div>
+        </form>
 
         <p className={styles.terms}>
-          Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade
+          Ao continuar, você concorda com nossos Termos de Serviço e Política de
+          Privacidade
         </p>
-      </div>
-    </div>
+      </section>
+
+      <Toast
+        visible={toast.visible}
+        title={toast.title}
+        message={toast.message}
+        type={toast.type}
+        onClose={() =>
+          setToast({
+            visible: false,
+            title: '',
+            message: '',
+            type: '',
+          })
+        }
+      />
+    </main>
+
   )
 }
+
+

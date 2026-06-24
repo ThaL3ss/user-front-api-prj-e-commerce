@@ -3,132 +3,188 @@ import { Link, useNavigate } from 'react-router-dom'
 import cadastroService from '../../services/cadastro/Cadastro.service'
 import Logo from '../../assets/Logo_ShirtStore.svg'
 import InputField from '../../components/shared/Commons/InputField/InputField'
-import { UserIcon, MailIcon, IdIcon, LockIcon, EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
+import ButtonPrimary from '../../components/shared/Commons/Buttons/Buttons_Primary'
+import { EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
+import { cadastroInputPresets } from "../../data/Inputs/InputField_Cadastro.data";
+import { buttonPresets } from '../../data/Buttons/Button_Primary.data'
+import Toast from '../../components/shared/Commons/Toasts/Toast'
+import { getToastPreset } from '../../data/Toasts/Toast.data'
 import styles from './Cadastro.module.css'
 
 export default function Cadastro() {
   const navigate = useNavigate()
 
-  const [nome, setNome] = useState('')
-  const [email, setEmail] = useState('')
-  const [cpf, setCpf] = useState('')
-  const [senha, setSenha] = useState('')
+  const [form, setForm] = useState({
+    nome: '',
+    sobrenome: '',
+    email: '',
+    cpf: '',
+    senha: '',
+    confirmarSenha: '',
+  })
+
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+  function handleChange(event) {
+    const { name, value } = event.target
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+
+    if (form.senha !== form.confirmarSenha) {
+      const preset =
+        getToastPreset('senha-error')
+
+      setToast({
+        visible: true,
+        ...preset,
+      })
+      return
+    }
+
     try {
-      // CPF apenas com dígitos (a API espera 11 dígitos numéricos).
-      const cpfDigits = cpf.replace(/\D/g, '')
-      await cadastroService.post('/auth/register', { nome, email, cpf: cpfDigits, senha })
-      navigate('/login', { state: { success: 'Conta criada com sucesso! Faça login para continuar.' } })
-    } catch {
-      // Mensagem genérica — nunca detalhar o que falhou.
-      setError('Não foi possível criar a conta. Verifique os dados e tente novamente.')
+      setLoading(true)
+
+      await cadastroService.post('/auth/cadastro', {
+        nome: form.nome,
+        sobrenome: form.sobrenome,
+        email: form.email,
+        cpf: form.cpf,
+        senha: form.senha,
+      })
+
+      const preset =
+        getToastPreset('cadastro-success')
+
+      setToast({
+        visible: true,
+        ...preset,
+      })
+      navigate('/login')
+    } catch (error) {
+      console.error(error)
+      const preset =
+        getToastPreset('cadastro-error')
+
+      setToast({
+        visible: true,
+        ...preset,
+      })
     } finally {
       setLoading(false)
     }
   }
 
+  const cadastroButton = buttonPresets.filter(
+    (button) => button.id === 'cadastro-submit'
+  )
+
+  const [toast, setToast] = useState({
+    visible: false,
+    title: '',
+    message: '',
+    type: '',
+  })
+
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
-        {/* Cabeçalho */}
+    <main className={styles.page}>
+      <section className={styles.container}>
         <div className={styles.header}>
           <img src={Logo} alt="ShirtStore" className={styles.logo} />
-          <h1 className={styles.title}>ShirtStore</h1>
-          <p className={styles.subtitle}>Crie sua conta</p>
+
+          <h1 className={styles.title}>Criar conta</h1>
+          <p className={styles.subtitle}>Cadastre-se na ShirtStore</p>
         </div>
 
-        {/* Card */}
-        <div className={styles.card}>
-          <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {cadastroInputPresets.map((input) => (
             <InputField
-              id="nome"
-              type="text"
-              label="Nome Completo"
-              placeholder="Seu nome"
-              icon={<UserIcon />}
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              autoComplete="name"
-              required
-            />
-
-            <InputField
-              id="email"
-              type="email"
-              label="Email"
-              placeholder="seu@email.com"
-              icon={<MailIcon />}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-
-            <InputField
-              id="cpf"
-              type="text"
-              inputMode="numeric"
-              label="CPF"
-              placeholder="000.000.000-00"
-              icon={<IdIcon />}
-              value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
-              autoComplete="off"
-              required
-            />
-
-            <div>
-              <InputField
-                id="senha"
-                type={showPassword ? 'text' : 'password'}
-                label="Senha"
-                placeholder="••••••••"
-                icon={<LockIcon />}
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                autoComplete="new-password"
-                minLength={8}
-                required
-                trailing={
+              key={input.id}
+              label={input.label}
+              name={input.name}
+              type={
+                input.id === 'senha'
+                  ? showPassword
+                    ? 'text'
+                    : 'password'
+                  : input.id === 'confirmarSenha'
+                    ? showConfirmPassword
+                      ? 'text'
+                      : 'password'
+                    : input.type
+              }
+              placeholder={input.placeholder}
+              icon={input.icon}
+              rightIcon={
+                input.id === 'senha' ? (
                   <button
                     type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className={styles.toggle}
-                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    className={styles.eyeButton}
+                    onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                   </button>
-                }
-              />
-              <p className={styles.hint}>Mínimo de 8 caracteres</p>
-            </div>
+                ) : input.id === 'confirmarSenha' ? (
+                  <button
+                    type="button"
+                    className={styles.eyeButton}
+                    onClick={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
+                  >
+                    {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                ) : null
+              }
+              value={form[input.name]}
+              onChange={handleChange}
+            />
+          ))}
 
-            {error && (
-              <p className={styles.error} role="alert">
-                {error}
-              </p>
-            )}
+          {cadastroButton.map((button) => (
+            <ButtonPrimary
+              key={button.id}
+              type="submit"
+              variant={button.variant}
+              size={button.size}
+              full={button.full}
+              disabled={loading}
+            >
+              {loading ? 'Cadastrando...' : button.text}
+            </ButtonPrimary>
+          ))}
 
-            <button type="submit" disabled={loading} className={styles.submit}>
-              {loading ? 'Criando conta...' : 'Criar Conta'}
-            </button>
-          </form>
-
-          <p className={styles.signup}>
+          <p className={styles.loginText}>
             Já tem uma conta?{' '}
-            <Link to="/login" className={styles.signupLink}>
-              Faça login
+            <Link to="/login" className={styles.loginLink}>
+              Entrar
             </Link>
           </p>
-        </div>
-      </div>
-    </div>
+        </form>
+      </section>
+
+      <Toast
+        visible={toast.visible}
+        title={toast.title}
+        message={toast.message}
+        type={toast.type}
+        onClose={() =>
+          setToast({
+            visible: false,
+            title: '',
+            message: '',
+            type: '',
+          })
+        }
+      />
+    </main>
   )
 }

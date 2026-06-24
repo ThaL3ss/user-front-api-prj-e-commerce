@@ -1,11 +1,15 @@
 .page {
-  display: flex;
   min-height: 100vh;
-  flex-direction: column;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.82)),
+    url('../../assets/bg_ShirtStore.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EEF2FF;
-  padding: 2.5rem 1rem;        /* py-10 px-4 */
+  padding: 40px 16px;
 }
 
 .container {
@@ -119,4 +123,35 @@
 
 .logo {
   width: 8vw;
+}
+
+.title {
+  color: #ffffff;
+}
+
+.subtitle {
+  color: #b8c0cc;
+}
+
+.forgotPassword,
+.registerLink,
+.loginLink {
+  color: #c6ff00;
+  text-decoration: none;
+}
+
+.rememberLabel,
+.registerText,
+.loginText,
+.terms {
+  color: #b8c0cc;
+}
+
+.eyeButton {
+  border: none;
+  background: transparent;
+  color: #8b95a5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }

@@ -15,53 +15,40 @@ export default function Navbar({ userName }) {
 
   return (
     <header className={styles.header}>
-      {/* Faixa superior: logo + título + ajuda */}
-      <div className={styles.topBar}>
-        <Link to="/perfil" className={styles.logoLink}>
-          <img src={Logo} alt="ShirtStore" className={styles.logo} />
-        </Link>
-        <h1 className={styles.title}>E-commerce ShirtStore</h1>
-        <button type="button" className={styles.iconButton} aria-label="Ajuda">
-          <HelpIcon />
-        </button>
-      </div>
+      <Link to="/perfil" className={styles.brand}>
+        <img src={Logo} alt="ShirtStore" className={styles.logo} />
+        <strong>ShirtStore</strong>
+      </Link>
 
-      {/* Faixa de navegação: links + usuário/logout */}
       <nav className={styles.nav}>
-        <div className={styles.navCenter}>
-          <a href="#" className={styles.navLink}>
-            <HomeIcon /> Catálogo
-          </a>
-          {/* "Meus Pedidos" não aparece para cliente — acesso só pelo card no perfil. */}
-          {isAdmin && (
-            <a href="#" className={styles.navLink}>
-              <BoxIcon /> Meus Pedidos
-            </a>
-          )}
-          {isAdmin && (
-            <NavLink to="/admin" className={navLinkClass}>
-              <StarIcon /> Admin
-            </NavLink>
-          )}
-        </div>
+        <a href="#" className={styles.navLink}>
+          <HomeIcon /> Catálogo
+        </a>
 
-        <div className={styles.navRight}>
-          <button type="button" className={styles.cartButton} aria-label="Carrinho">
-            <CartIcon />
-          </button>
-          <span className={styles.user}>
-            <UserIcon />
-            {userName}
-          </span>
-          <button
-            type="button"
-            onClick={logout}
-            className={styles.logoutButton}
-            aria-label="Sair"
-          >
-            <LogoutIcon />
-          </button>
-        </div>
+        {isAdmin && (
+          <a href="#" className={styles.navLink}>
+            <BoxIcon /> Meus Pedidos
+          </a>
+        )}
+
+        {isAdmin && (
+          <NavLink to="/admin" className={navLinkClass}>
+            <StarIcon /> Admin
+          </NavLink>
+        )}
+
+        <button type="button" className={styles.cartButton}>
+          <CartIcon />
+        </button>
+
+        <span className={styles.user}>
+          <UserIcon />
+          {userName}
+        </span>
+
+        <button type="button" onClick={logout} className={styles.logoutButton}>
+          <LogoutIcon />
+        </button>
       </nav>
     </header>
   )

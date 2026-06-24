@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import Logo from '../Logo'
-import { HomeIcon, BoxIcon, StarIcon, CartIcon, UserIcon, LogoutIcon, HelpIcon } from '../icons'
+import { useAuth } from '../../../context/AuthContext'
+import Logo from '../../../assets/Logo_ShirtStore.svg'
+import { HomeIcon, BoxIcon, StarIcon, CartIcon, UserIcon, LogoutIcon, HelpIcon } from '../../../assets/icons/Icons'
 import styles from './Navbar.module.css'
 
 // Navbar das telas autenticadas (ver perfil-adm.png).
@@ -18,7 +18,7 @@ export default function Navbar({ userName }) {
       {/* Faixa superior: logo + título + ajuda */}
       <div className={styles.topBar}>
         <Link to="/perfil" className={styles.logoLink}>
-          <Logo size="sm" />
+          <img src={Logo} alt="ShirtStore" className={styles.logo} />
         </Link>
         <h1 className={styles.title}>E-commerce ShirtStore</h1>
         <button type="button" className={styles.iconButton} aria-label="Ajuda">

@@ -116,3 +116,7 @@
 .signupLink:hover {
   text-decoration: underline;
 }
+
+.logo {
+  width: 8vw;
+}

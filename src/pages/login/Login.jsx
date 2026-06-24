@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import Logo from '../components/Logo'
-import InputField from '../components/InputField'
-import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/icons'
+import { useAuth } from '../../context/AuthContext'
+import Logo from '../../assets/Logo_ShirtStore.svg'
+import InputField from '../../components/shared/Commons/InputField/InputField'
+import { MailIcon, LockIcon, EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
 import styles from './Login.module.css'
 
 export default function Login() {
@@ -41,7 +41,7 @@ export default function Login() {
       <div className={styles.container}>
         {/* Cabeçalho */}
         <div className={styles.header}>
-          <Logo size="md" />
+          <img src={Logo} alt="ShirtStore" className={styles.logo} />
           <h1 className={styles.title}>ShirtStore</h1>
           <p className={styles.subtitle}>Entre na sua conta</p>
         </div>

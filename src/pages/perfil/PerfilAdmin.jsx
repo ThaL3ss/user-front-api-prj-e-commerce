@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import api from '../services/api'
-import Navbar from '../components/Navbar'
-import { ShieldIcon } from '../components/icons'
+import authService from '../../services/login/Auth.service'
+import Navbar from '../../components/shared/Navbar/Navbar'
+import { ShieldIcon } from '../../assets/icons/Icons'
 import styles from './PerfilAdmin.module.css'
 
 // Painel administrativo (rota /admin, protegida por role: admin via PrivateRoute).
@@ -12,7 +12,7 @@ export default function PerfilAdmin() {
 
   useEffect(() => {
     let active = true
-    api
+    authService
       .get('/usuarios/me')
       .then(({ data }) => active && setUser(data))
       .catch(() => {})

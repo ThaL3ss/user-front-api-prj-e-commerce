@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import api from '../services/api'
-import Logo from '../components/Logo'
-import InputField from '../components/InputField'
-import { UserIcon, MailIcon, IdIcon, LockIcon, EyeIcon, EyeOffIcon } from '../components/icons'
+import cadastroService from '../../services/cadastro/Cadastro.service'
+import Logo from '../../assets/Logo_ShirtStore.svg'
+import InputField from '../../components/shared/Commons/InputField/InputField'
+import { UserIcon, MailIcon, IdIcon, LockIcon, EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
 import styles from './Cadastro.module.css'
 
 export default function Cadastro() {
@@ -24,7 +24,7 @@ export default function Cadastro() {
     try {
       // CPF apenas com dígitos (a API espera 11 dígitos numéricos).
       const cpfDigits = cpf.replace(/\D/g, '')
-      await api.post('/auth/register', { nome, email, cpf: cpfDigits, senha })
+      await cadastroService.post('/auth/register', { nome, email, cpf: cpfDigits, senha })
       navigate('/login', { state: { success: 'Conta criada com sucesso! Faça login para continuar.' } })
     } catch {
       // Mensagem genérica — nunca detalhar o que falhou.
@@ -39,7 +39,7 @@ export default function Cadastro() {
       <div className={styles.container}>
         {/* Cabeçalho */}
         <div className={styles.header}>
-          <Logo size="md" />
+          <img src={Logo} alt="ShirtStore" className={styles.logo} />
           <h1 className={styles.title}>ShirtStore</h1>
           <p className={styles.subtitle}>Crie sua conta</p>
         </div>

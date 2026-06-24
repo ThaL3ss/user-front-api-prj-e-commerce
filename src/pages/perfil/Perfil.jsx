@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import api from '../services/api'
-import { useAuth } from '../context/AuthContext'
-import Navbar from '../components/Navbar'
-import Enderecos from '../components/Enderecos'
-import AlterarSenha from '../components/AlterarSenha'
-import CollapsibleCard from '../components/CollapsibleCard'
-import { MailIcon, BoxIcon, ShieldIcon, MapPinIcon, ChevronDownIcon, LogoutIcon } from '../components/icons'
+import authService from '../../services/login/Auth.service'
+import Navbar from '../../components/shared/Navbar/Navbar'
+import { MailIcon, BoxIcon, ShieldIcon, MapPinIcon, ChevronDownIcon, LogoutIcon } from '../../assets/icons/Icons'
+import { useAuth } from '../../context/AuthContext'
+import Enderecos from '../../components/Enderecos/Enderecos'
+import AlterarSenha from '../../components/AlterarSenha/AlterarSenha'
+import CollapsibleCard from '../../components/CollapsibleCard/CollapsibleCard'
 import styles from './Perfil.module.css'
 
 export default function Perfil() {
@@ -20,7 +20,7 @@ export default function Perfil() {
   // Todos os dados do usuário vêm de GET /usuarios/me.
   useEffect(() => {
     let active = true
-    api
+    authService
       .get('/usuarios/me')
       .then(({ data }) => {
         if (active) setUser(data)

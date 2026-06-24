@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import api from '../../services/api'
-import InputField from '../InputField'
-import { MapPinIcon, HashIcon, TrashIcon, PencilIcon } from '../icons'
+import authService from '../../services/login/Auth.service'
+import InputField from '../shared/Commons/InputField/InputField'
+import { MapPinIcon, HashIcon, TrashIcon, PencilIcon } from '../../assets/icons/Icons'
 import styles from './Enderecos.module.css'
 
 const EMPTY_FORM = { nome: '', cep: '', rua: '', numero: '', complemento: '' }
@@ -25,7 +25,7 @@ export default function Enderecos() {
 
   // Lista os endereços do usuário logado (token via interceptor do axios).
   const carregar = useCallback(() => {
-    api
+    authService
       .get('/enderecos')
       .then(({ data }) => setEnderecos(Array.isArray(data) ? data : []))
       .catch(() => setEnderecos([]))
@@ -103,9 +103,9 @@ export default function Enderecos() {
     setSaving(true)
     try {
       if (editingId != null) {
-        await api.put(`/enderecos/${editingId}`, payload)
+        await authService.put(`/enderecos/${editingId}`, payload)
       } else {
-        await api.post('/enderecos', payload)
+        await authService.post('/enderecos', payload)
       }
       resetForm()
       carregar()
@@ -133,7 +133,7 @@ export default function Enderecos() {
 
   async function handleDelete(id) {
     try {
-      await api.delete(`/enderecos/${id}`)
+      await authService.delete(`/enderecos/${id}`)
       if (editingId === id) resetForm()
       carregar()
     } catch {

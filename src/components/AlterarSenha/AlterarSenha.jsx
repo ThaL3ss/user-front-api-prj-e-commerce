@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import api from '../../services/api'
-import InputField from '../InputField'
-import { LockIcon, EyeIcon, EyeOffIcon } from '../icons'
+import authService from '../../services/login/Auth.service'
+import InputField from '../shared/Commons/InputField/InputField'
+import { LockIcon, EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
 import styles from './AlterarSenha.module.css'
 
 // Campo de senha com botão mostrar/ocultar (cada campo controla seu próprio estado).
@@ -54,7 +54,7 @@ export default function AlterarSenha() {
 
     setLoading(true)
     try {
-      await api.patch('/usuarios/me/senha', {
+      await authService.patch('/usuarios/me/senha', {
         senha_atual: senhaAtual,
         nova_senha: novaSenha,
       })

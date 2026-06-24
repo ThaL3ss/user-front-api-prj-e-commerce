@@ -162,3 +162,7 @@
   line-height: 1.25rem;
   color: #9ca3af;              /* text-gray-400 */
 }
+
+.logo {
+  width: 8vw;
+}

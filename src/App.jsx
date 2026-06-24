@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Login from './pages/Login'
-import Cadastro from './pages/Cadastro'
-import Perfil from './pages/Perfil'
-import PerfilAdmin from './pages/PerfilAdmin'
-import PrivateRoute from './components/PrivateRoute'
+import Login from './pages/login/Login'
+import Cadastro from './pages/cadastro/Cadastro'
+import Perfil from './pages/perfil/Perfil'
+import PerfilAdmin from './pages/perfil/PerfilAdmin'
+import PrivateRoute from './routes/PrivateRoute'
 
 export default function App() {
   return (

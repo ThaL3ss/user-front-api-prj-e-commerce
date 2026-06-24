@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDownIcon } from '../icons'
+import { ChevronDownIcon } from '../../assets/icons/Icons'
 import styles from './CollapsibleCard.module.css'
 
 // Card colapsável: mostra só o título + seta quando fechado; expande/recolhe

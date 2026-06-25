@@ -6,9 +6,10 @@ import InputField from '../../components/shared/Commons/InputField/InputField'
 import ButtonPrimary from '../../components/shared/Commons/Buttons/Buttons_Primary'
 import { EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
 import { loginInputPresets } from '../../data/Inputs/InputField_Login.data'
-import { buttonPresets } from '../../data/Buttons/Button_Primary.data'
+import { buttonPrimaryPresets } from '../../data/Buttons/Button_Primary.data'
 import Toast from '../../components/shared/Commons/Toasts/Toast'
 import { getToastPreset } from '../../data/Toasts/Toast.data'
+import Topbar from "../../components/shared/Topbar/Topbar";
 import styles from './Login.module.css'
 
 export default function Login() {
@@ -55,7 +56,7 @@ export default function Login() {
     }
   }
 
-  const loginButton = buttonPresets.filter(
+  const loginButton = buttonPrimaryPresets.filter(
     (button) => button.id === 'login-submit'
   )
 
@@ -68,8 +69,11 @@ export default function Login() {
 
   return (
     <main className={styles.page}>
+      <header className={styles.header}>
+        <Topbar />
+      </header>
       <section className={styles.container}>
-        <div className={styles.header}>
+        <div className={styles.logoContent}>
           <img src={Logo} alt="ShirtStore" className={styles.logo} />
 
           <h1 className={styles.title}>ShirtStore</h1>

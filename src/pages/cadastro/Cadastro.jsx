@@ -6,7 +6,7 @@ import InputField from '../../components/shared/Commons/InputField/InputField'
 import ButtonPrimary from '../../components/shared/Commons/Buttons/Buttons_Primary'
 import { EyeIcon, EyeOffIcon } from '../../assets/icons/Icons'
 import { cadastroInputPresets } from "../../data/Inputs/InputField_Cadastro.data";
-import { buttonPresets } from '../../data/Buttons/Button_Primary.data'
+import { buttonPrimaryPresets } from '../../data/Buttons/Button_Primary.data'
 import Toast from '../../components/shared/Commons/Toasts/Toast'
 import { getToastPreset } from '../../data/Toasts/Toast.data'
 import styles from './Cadastro.module.css'
@@ -83,7 +83,7 @@ export default function Cadastro() {
     }
   }
 
-  const cadastroButton = buttonPresets.filter(
+  const cadastroButton = buttonPrimaryPresets.filter(
     (button) => button.id === 'cadastro-submit'
   )
 

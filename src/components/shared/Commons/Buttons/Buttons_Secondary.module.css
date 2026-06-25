@@ -1,0 +1,53 @@
+.button {
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+}
+
+.secondary {
+  background: #ffffff;
+  color: #111111;
+}
+
+.secondary:hover {
+  background: #c6ff00;
+}
+
+.dark {
+  background: #111111;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+
+.sm {
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.md {
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.lg {
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.full {
+  width: 100%;
+}
+
+.icon {
+  display: flex;
+}

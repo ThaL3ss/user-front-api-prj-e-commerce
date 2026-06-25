@@ -1,0 +1,75 @@
+.section {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+    width: 70px;
+}
+
+.nav {
+  display: flex;  
+  gap: 34px;    
+}
+
+.nav a {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.nav a:hover {
+  color: #c6ff00;
+}
+
+.active:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #c6ff00;
+  border-radius: 4px 4px 0 0;
+}
+
+.headerIcons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.headerIcons button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.iconLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: .25s;
+}
+
+.iconLink:hover {
+    color: #d8ff00;    
+}
+
+.iconLink svg,
+.headerIcons button svg {
+    width: 24px;
+    height: 24px;
+}

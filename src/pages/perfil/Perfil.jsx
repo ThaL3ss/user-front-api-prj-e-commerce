@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import authService from '../../services/login/Auth.service'
-import Navbar from '../../components/shared/Navbar/Navbar'
+import Topbar from "../../components/shared/Topbar/Topbar";
 import { MailIcon, BoxIcon, ShieldIcon, MapPinIcon, ChevronDownIcon, LogoutIcon } from '../../assets/icons/Icons'
 import { useAuth } from '../../context/AuthContext'
 import Enderecos from '../../components/Enderecos/Enderecos'
@@ -42,7 +42,7 @@ export default function Perfil() {
 
   return (
     <div className={styles.page}>
-      <Navbar userName={user?.nome ?? ''} />
+      <Topbar userName={user?.nome ?? ''} />
 
       <main className={styles.main}>
         <h2 className={styles.heading}>Meu Perfil</h2>

@@ -1,0 +1,36 @@
+.newsletterForm {
+    display: flex;
+    align-items: center;
+}
+
+.newsletterForm input {
+    width: 310px;
+    height: 44px;
+    background: #000;
+    border-left: 2px solid #fff;
+    border-radius: 10px 0px 0px 10px;
+    color: #fff;
+    padding: 0 18px;
+    outline: none;
+    font-size: 15px;
+}
+
+.newsletterForm input::placeholder {
+    color: #bfcad4;
+}
+
+.newsletterForm button {
+    height: 44px;
+    padding: 0 18px;
+    border: none;
+    background: #c6ff00;
+    color: #000;
+    font-weight: 700;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.newsletterForm button:hover {
+    filter: brightness(.9);
+}

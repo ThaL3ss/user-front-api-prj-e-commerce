@@ -100,8 +100,8 @@ npx prisma studio
 ```
 PORT=3030
 NODE_ENV=development
-DATABASE_URL="mysql://20261_prjint5_noite:Senac%4020261@edumysql.acesso.rj.senac.br:3306/20261_prjint5_parllonmendonca"
-JWT_SECRET=p2ReAHISLU65lsXQl+FtfA==
+DATABASE_URL="mysql://<usuario>:<senha>@<host>:<porta>/<schema_parllon>"
+JWT_SECRET=<jwt_secret_compartilhado_com_thales>
 ALLOWED_ORIGINS=http://localhost:5173
 ```
 

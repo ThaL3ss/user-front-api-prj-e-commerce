@@ -4,15 +4,17 @@ import Login from './pages/login/Login'
 import Cadastro from './pages/cadastro/Cadastro'
 import Perfil from './pages/perfil/Perfil'
 import PerfilAdmin from './pages/perfil/PerfilAdmin'
+import Carrinho from './pages/Carrinho/Carrinho'
 import AppRoutes from './routes/AppRoutes'
 import PrivateRoute from './routes/PrivateRoute'
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />      
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/carrinho" element={<Carrinho />} />
 
       <Route
         path="/perfil"

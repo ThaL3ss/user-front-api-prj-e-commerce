@@ -349,6 +349,34 @@
     border: 2px solid #fff;
     border-radius: 5px;
     font-weight: 800;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.sizeActive {
+    background: #c6ff00 !important;
+    color: #111 !important;
+    border-color: #c6ff00 !important;
+}
+
+.addToCartBtn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px 0;
+    background: transparent;
+    color: #c6ff00;
+    border: 1.5px solid #c6ff00;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-transform: uppercase;
+}
+
+.addToCartBtn:hover {
+    background: #c6ff00;
+    color: #111;
 }
 
 .benefits {

@@ -5,17 +5,21 @@ import ImgHero02 from '../../assets/img-2_hero_section_home.png'
 import ImgHero03 from '../../assets/img-3_hero_section_home.png'
 import ImgLancamentos from '../../assets/img_lancamentos_home.png'
 import ImgPersonalizado from '../../assets/img_personalizado_home.png'
-import ImgShirtDefault from '../../assets/img_shirt_default.png'
 import ImgNewletter from '../../assets/img_newletter_home.png'
 import ButtonPrimary from '../../components/shared/Commons/Buttons/Buttons_Primary'
 import ButtonSecondary from '../../components/shared/Commons/Buttons/Buttons_Secondary'
+import Toast from '../../components/shared/Commons/Toasts/Toast'
 import { buttonPrimaryPresets } from '../../data/Buttons/Button_Primary.data'
 import { buttonSecondaryPresets } from '../../data/Buttons/Button_Secondary.data'
-import { benefits, categories, products } from '../../data/Home/Home.data'
+import { benefits, categories, products as staticProducts } from '../../data/Home/Home.data'
 import NewsletterInput from '../../components/shared/Commons/NewsletterInput/NewsletterInput'
+import { getAllProducts } from '../../services/product/Product.service'
+import { useCart } from '../../context/CartContext'
 import styles from './Home.module.css'
 
 export default function Home() {
+    const { addItem } = useCart()
+
     const heroButton = buttonPrimaryPresets.find(
         (button) => button.id === 'home-hero-buy'
     )
@@ -33,21 +37,50 @@ export default function Home() {
     )
 
     const heroSlides = [
-        {
-            id: 1,
-            image: ImgHero01,
-        },
-        {
-            id: 2,
-            image: ImgHero02,
-        },
-        {
-            id: 3,
-            image: ImgHero03,
-        },
+        { id: 1, image: ImgHero01 },
+        { id: 2, image: ImgHero02 },
+        { id: 3, image: ImgHero03 },
     ]
 
     const [currentSlide, setCurrentSlide] = useState(0)
+    const [products, setProducts] = useState(staticProducts)
+    const [selectedSizes, setSelectedSizes] = useState({})
+    const [toast, setToast] = useState({ visible: false, title: '', message: '', type: 'success' })
+
+    function showToast(title, message, type = 'success') {
+        setToast({ visible: true, title, message, type })
+        setTimeout(() => setToast((t) => ({ ...t, visible: false })), 3000)
+    }
+
+    function handleAddToCart(product) {
+        const size = selectedSizes[product.id]
+        if (!size) {
+            showToast('Selecione um tamanho', 'Escolha P, M, G ou GG antes de adicionar.', 'warning')
+            return
+        }
+        addItem(
+            { id: product.id, name: product.name, price: product.price, image: product.image ?? null },
+            size,
+        )
+        showToast('Adicionado!', `${product.name} foi adicionado ao carrinho.`, 'success')
+    }
+
+    useEffect(() => {
+        getAllProducts()
+            .then(({ data }) => {
+                const apiProducts = data.map((p) => ({
+                    id: p.idProduto,
+                    name: p.nomeProduto,
+                    price: p.precoProduto,
+                    image: p.urlImagem ?? null,
+                    installments: `3x de R$ ${(p.precoProduto / 3).toFixed(2).replace('.', ',')} sem juros`,
+                }))
+                if (apiProducts.length > 0) setProducts(apiProducts)
+            })
+            .catch(() => {
+                // Mantém produtos estáticos se a API falhar
+            })
+    }, [])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -61,6 +94,13 @@ export default function Home() {
 
     return (
         <main className={styles.page}>
+            <Toast
+                visible={toast.visible}
+                title={toast.title}
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast((t) => ({ ...t, visible: false }))}
+            />
             <header className={styles.header}>
                 <Topbar />
             </header>
@@ -198,15 +238,35 @@ export default function Home() {
                             </div>
 
                             <h3>{product.name}</h3>
-                            <strong>{product.price}</strong>
+                            <strong>
+                                {typeof product.price === 'number'
+                                    ? product.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                                    : product.price}
+                            </strong>
                             <p>{product.installments}</p>
 
                             <div className={styles.sizes}>
-                                <button>P</button>
-                                <button>M</button>
-                                <button>G</button>
-                                <button>GG</button>
+                                {['P', 'M', 'G', 'GG'].map((size) => (
+                                    <button
+                                        key={size}
+                                        type="button"
+                                        className={selectedSizes[product.id] === size ? styles.sizeActive : ''}
+                                        onClick={() =>
+                                            setSelectedSizes((prev) => ({ ...prev, [product.id]: size }))
+                                        }
+                                    >
+                                        {size}
+                                    </button>
+                                ))}
                             </div>
+
+                            <button
+                                type="button"
+                                className={styles.addToCartBtn}
+                                onClick={() => handleAddToCart(product)}
+                            >
+                                Adicionar ao carrinho
+                            </button>
                         </article>
                     ))}
                 </div>

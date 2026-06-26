@@ -1,7 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
 import Logo from '../../../assets/Logo_ShirtStore.svg'
-import { UserOutIcon, ShopIcon } from '../../../assets/icons/Icons'
+import { UserOutIcon, ShopIcon, CartIcon } from '../../../assets/icons/Icons'
 import { menuItems } from '../../../data/Topbar/Topbar.data'
+import { useCart } from '../../../context/CartContext'
 import styles from './Topbar.module.css'
 
 const menuRoutes = {
@@ -10,6 +11,8 @@ const menuRoutes = {
 }
 
 export default function TopBar() {
+  const { itemCount } = useCart()
+
   return (
     <section className={styles.section}>
       <img src={Logo} alt="ShirtStore" className={styles.logo} />
@@ -33,8 +36,15 @@ export default function TopBar() {
           <UserOutIcon />
         </Link>
 
-        <Link to="/catalogo" className={styles.iconLink}>
-          <ShopIcon />
+        <Link to="/carrinho" className={styles.iconLink}>
+          <div className={styles.cartWrapper}>
+            <CartIcon />
+            {itemCount > 0 && (
+              <span className={styles.cartBadge}>
+                {itemCount > 99 ? '99+' : itemCount}
+              </span>
+            )}
+          </div>
         </Link>
       </div>
     </section>

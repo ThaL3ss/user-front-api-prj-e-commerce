@@ -52,6 +52,11 @@ export default function Home() {
         setTimeout(() => setToast((t) => ({ ...t, visible: false })), 3000)
     }
 
+    function parsePrice(price) {
+        if (typeof price === 'number') return price
+        return parseFloat(String(price).replace(/[^\d,]/g, '').replace(',', '.')) || 0
+    }
+
     function handleAddToCart(product) {
         const size = selectedSizes[product.id]
         if (!size) {
@@ -59,7 +64,7 @@ export default function Home() {
             return
         }
         addItem(
-            { id: product.id, name: product.name, price: product.price, image: product.image ?? null },
+            { id: product.id, name: product.name, price: parsePrice(product.price), image: product.image ?? null },
             size,
         )
         showToast('Adicionado!', `${product.name} foi adicionado ao carrinho.`, 'success')

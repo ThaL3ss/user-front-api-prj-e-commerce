@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useEffect, useState, useCallback } from 'react'
 import { useAuth } from './AuthContext'
-import { getCart, addCartItem, updateCartItem, removeCartItem, clearServerCart } from '../services/cart/Cart.service'
+import { getCart, addCartItem, clearServerCart } from '../services/cart/Cart.service'
 
 const CartContext = createContext(null)
 
@@ -85,74 +85,61 @@ export function CartProvider({ children }) {
     loading: false,
   })
 
-  const [initialized, setInitialized] = useState(false)
+  const [synced, setSynced] = useState(false)
 
-  // Sync from server on login
+  // Sync with server on login
   useEffect(() => {
     if (!isAuthenticated) {
-      setInitialized(true)
+      setSynced(false)
       return
     }
+    if (synced) return
 
-    dispatch({ type: 'SET_LOADING', payload: true })
+    const localItems = readStorage()
 
-    getCart()
-      .then(({ data }) => {
-        const serverItems = data?.itens ?? data?.items ?? []
-        if (serverItems.length > 0) {
-          const mapped = serverItems.map((i) => ({
-            id: String(i.id),
-            productId: i.produto_id ?? i.productId,
-            name: i.nome_produto ?? i.name,
-            price: i.preco_unitario ?? i.price,
-            size: i.tamanho ?? i.size,
-            quantity: i.quantidade ?? i.quantity,
-            image: i.url_imagem ?? i.image ?? null,
-          }))
-          dispatch({ type: 'LOAD_CART', payload: mapped })
-          writeStorage(mapped)
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false })
-          const localItems = readStorage()
-          if (localItems.length > 0) {
-            localItems.forEach((item) => {
-              addCartItem({
-                produto_id: item.productId,
-                nome_produto: item.name,
-                preco_unitario: item.price,
-                tamanho: item.size,
-                quantidade: item.quantity,
-                url_imagem: item.image ?? null,
-              }).catch(() => {})
-            })
+    if (localItems.length > 0) {
+      // localStorage has items — push to server as backup (ignore size, backend stores by product)
+      localItems.forEach((item) => {
+        addCartItem({
+          produto_id: String(item.productId),
+          nome: item.name,
+          preco: item.price,
+          quantidade: item.quantity,
+        }).catch(() => {})
+      })
+      setSynced(true)
+    } else {
+      // localStorage empty — try to restore from server (items come back without size)
+      dispatch({ type: 'SET_LOADING', payload: true })
+      getCart()
+        .then(({ data }) => {
+          const serverItems = data?.item_carrinho ?? []
+          if (serverItems.length > 0) {
+            const mapped = serverItems.map((i) => ({
+              id: generateId(),
+              productId: i.produto?.sku ?? String(i.produto_id),
+              name: i.produto?.nome ?? 'Produto',
+              price: Number(i.preco_unitario),
+              size: null,
+              quantity: i.quantidade,
+              image: null,
+            }))
+            dispatch({ type: 'LOAD_CART', payload: mapped })
+            writeStorage(mapped)
+          } else {
+            dispatch({ type: 'SET_LOADING', payload: false })
           }
-        }
-      })
-      .catch(() => {
-        dispatch({ type: 'SET_LOADING', payload: false })
-      })
-      .finally(() => {
-        setInitialized(true)
-      })
+        })
+        .catch(() => dispatch({ type: 'SET_LOADING', payload: false }))
+        .finally(() => setSynced(true))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   // Persist to localStorage on every change
   useEffect(() => {
     writeStorage(state.items)
   }, [state.items])
-
-  // Sync to server after init (debounced)
-  useEffect(() => {
-    if (!initialized || !isAuthenticated) return
-
-    const timer = setTimeout(() => {
-      state.items.forEach((item) => {
-        updateCartItem(item.id, item.quantity).catch(() => {})
-      })
-    }, 500)
-
-    return () => clearTimeout(timer)
-  }, [state.items, initialized, isAuthenticated])
 
   const addItem = useCallback((product, size) => {
     dispatch({
@@ -168,31 +155,21 @@ export function CartProvider({ children }) {
 
     if (isAuthenticated) {
       addCartItem({
-        produto_id: product.id,
-        nome_produto: product.name,
-        preco_unitario: product.price,
-        tamanho: size,
+        produto_id: String(product.id),
+        nome: product.name,
+        preco: product.price,
         quantidade: 1,
-        url_imagem: product.image ?? null,
       }).catch(() => {})
     }
   }, [isAuthenticated])
 
   const removeItem = useCallback((id) => {
     dispatch({ type: 'REMOVE_ITEM', payload: id })
-    if (isAuthenticated) {
-      removeCartItem(id).catch(() => {})
-    }
-  }, [isAuthenticated])
+  }, [])
 
   const updateQuantity = useCallback((id, quantity) => {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
-    if (isAuthenticated && quantity > 0) {
-      updateCartItem(id, quantity).catch(() => {})
-    } else if (isAuthenticated && quantity <= 0) {
-      removeCartItem(id).catch(() => {})
-    }
-  }, [isAuthenticated])
+  }, [])
 
   const clearCart = useCallback(() => {
     dispatch({ type: 'CLEAR_CART' })

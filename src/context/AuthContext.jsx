@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
 
   // Autentica via POST /auth/login e persiste a sessão no localStorage.
   const login = useCallback(async (email, senha) => {
-    const { data } = await api.post('/auth/login', { email, senha })
+    const { data } = await authService.post('/auth/login', { email, senha })
 
     localStorage.setItem('accessToken', data.accessToken)
     if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)

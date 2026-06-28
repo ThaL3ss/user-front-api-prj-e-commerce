@@ -1,12 +1,24 @@
+import { useCallback } from "react";
+import authService from "../../../services/login/Auth.service";
 import styles from "./CardPedidoProduto.module.css";
 
-export default function CardPedidoProduto({ produto, onComprarNovamente }) {
-  const handleComprarNovamente = () => {
-    onComprarNovamente({
-      produtoId: produto.id,
-      quantidade: produto.quantidade,
-    });
-  };
+export default function CardPedidoProduto({ produto, usuarioUuid }) {
+  // responsabilidade do card: adicionar o próprio produto no carrinho
+  const handleComprarNovamente = useCallback(async () => {
+    const payload = {
+      produtoId: produto.id_produto,
+      quantidade: produto.quantidade ?? produto.item_pedido_quantidade,
+    };
+
+    try {
+      // TODO: confirmar endereço desse endpoint
+      await authService.post("/carrinho", payload, {
+        headers: { usuario_uuid: usuarioUuid },
+      });
+    } catch {
+      // TODO: feedback visual de erro ao adicionar no carrinho
+    }
+  }, [produto, usuarioUuid]);
 
   return (
     <div className={styles.container}>
@@ -34,10 +46,7 @@ export default function CardPedidoProduto({ produto, onComprarNovamente }) {
           Qtde: {produto.item_pedido_quantidade}
         </span>
       </div>
-      <button
-        className={styles.button}
-        onClick={() => onComprarNovamente(produto)}
-      >
+      <button className={styles.button} onClick={handleComprarNovamente}>
         <span className={styles.textButton}>Comprar novamente</span>
       </button>
     </div>

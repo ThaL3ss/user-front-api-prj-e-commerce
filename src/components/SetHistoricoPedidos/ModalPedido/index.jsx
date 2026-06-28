@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import authService from "../../../services/login/Auth.service";
-import { useAuth } from "../../../context/AuthContext";
 import CardPedidoProduto from "../CardPedidoProduto/index";
 import styles from "./ModalPedido.module.css";
 
@@ -28,14 +27,7 @@ function formatarData(data) {
 
 // recebera um pedido como prop, no formato retornado por GET /pedido:
 // { pedido_uuid, pedido_valor_total, status_pedido, pedido_created_at }
-export default function ModalPedido({
-  pedido,
-  onComprarNovamente,
-  onVerNotaFiscal,
-}) {
-  const { user } = useAuth();
-  const usuarioUuid = user?.uuid ?? user?.id;
-
+export default function ModalPedido({ pedido, usuarioUuid, onVerNotaFiscal }) {
   const [open, setOpen] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,29 +88,6 @@ export default function ModalPedido({
     }
   };
 
-  // monta o payload do carrinho (produto + quantidade) e envia para o
-  // carrinho do usuário (autenticado via header usuario_uuid)
-  const handleComprarNovamente = useCallback(
-    async (produto) => {
-      const payload = {
-        produtoId: produto.id_produto,
-        quantidade: produto.quantidade ?? produto.item_pedido_quantidade,
-      };
-
-      try {
-        // TODO: confirmar endereço desse endpoint
-        await authService.post("/carrinho", payload, {
-          headers: { usuario_uuid: usuarioUuid },
-        });
-
-        onComprarNovamente?.(payload);
-      } catch {
-        // TODO: feedback visual de erro ao adicionar no carrinho
-      }
-    },
-    [onComprarNovamente, usuarioUuid],
-  );
-
   const statusClass =
     STATUS_STYLE[pedido.status_pedido] ?? styles.statusDefault;
 
@@ -164,7 +133,7 @@ export default function ModalPedido({
               <CardPedidoProduto
                 key={produto.id_produto}
                 produto={produto}
-                onComprarNovamente={handleComprarNovamente}
+                usuarioUuid={usuarioUuid}
               />
             ))}
 

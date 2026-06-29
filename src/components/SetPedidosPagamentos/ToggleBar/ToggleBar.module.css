@@ -1,0 +1,27 @@
+.toggleBar {
+  display: flex;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #c2c7cf9c;
+}
+
+.toggleButton {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+
+  background-color: #D8E5F3;
+  color: #398b4b;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.active {
+  background-color: #22ce25;
+  color: white;
+}

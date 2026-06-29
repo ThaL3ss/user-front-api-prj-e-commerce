@@ -1,0 +1,60 @@
+.container {
+    width: 100%;
+    border-radius: 4rem;
+}
+
+.header {
+    width: fit-content;
+
+    min-width: 19.5rem;
+    height: 2.3rem;
+
+    display: flex;
+    align-items: center;
+    gap: .95rem;
+
+    padding: 0 1.1rem;
+
+    border-radius: 0 .75rem .75rem 0;
+
+    background: linear-gradient(
+        90deg,
+        #85eb25 0%,
+        #22ce25 100%
+    );
+
+    color: #fff;
+}
+
+.step {
+    width: 1.6rem;
+    height: 1.6rem;
+
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: .12rem solid #fff;
+    border-radius: .12rem;
+
+    font-size: 1rem;
+    font-weight: 650;
+}
+
+.title {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.content {
+    margin-top: .6rem;
+
+    padding: 1.25rem;
+
+    border-radius: .75rem;
+
+    background: #fff;
+
+    box-shadow: 0 .125rem .375rem rgba(0,0,0,.18);
+}

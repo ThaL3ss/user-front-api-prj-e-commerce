@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+
+    padding: .9rem 1rem;
+
+    border-radius: .625rem;
+
+    background: #f5f5f5;
+}
+
+.nome {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.detalhe {
+    font-size: .85rem;
+    color: #555;
+}
+
+.trocarButton {
+    align-self: flex-start;
+
+    margin-top: .25rem;
+
+    padding: .4rem 1rem;
+
+    border: none;
+    border-radius: .5rem;
+
+    background: linear-gradient(
+        90deg,
+        #85eb25 0%,
+        #22ce25 50%,
+        #66b51c 100%
+    );
+
+    color: #fff;
+
+    font-size: .85rem;
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.trocarButton:hover {
+    opacity: .9;
+}

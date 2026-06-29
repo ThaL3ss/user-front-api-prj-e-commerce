@@ -1,0 +1,28 @@
+.container {
+
+    display:grid;
+
+    grid-template-columns: 3fr 1.45fr;
+
+    gap:2.5rem;
+
+    align-items:start;
+
+    padding:2rem;
+}
+
+.step{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1rem;
+
+    padding:1.5rem;
+
+    border-radius:1rem;
+
+    background-color:#fff;
+
+    box-shadow:0 .125rem .375rem rgba(0,0,0,.18);
+}

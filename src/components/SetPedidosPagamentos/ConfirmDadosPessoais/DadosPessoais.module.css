@@ -1,0 +1,58 @@
+.container {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 5rem;
+    row-gap: 1rem;
+
+    padding: 1.25rem 1.5rem;
+}
+
+.nome,
+.email,
+.telefone,
+.destinatario,
+.cpf {
+    display: flex;
+    align-items: center;
+}
+
+.nome label,
+.email label,
+.telefone label,
+.destinatario label,
+.cpf label {
+    width: 6rem;
+
+    font-size: 1rem;
+    font-weight: 500;
+
+    color: #222;
+}
+
+.nome span,
+.email span,
+.telefone span,
+.cpf span {
+    font-size: 1rem;
+    color: #222;
+}
+
+.cpf {
+    align-self: start;
+}
+
+.destinatario input {
+    width: 13.5rem;
+    height: 2.25rem;
+
+    padding: 0 .875rem;
+
+    border: 1px solid #d9d9d9;
+    border-radius: .625rem;
+
+    outline: none;
+
+    font-size: 1rem;
+}

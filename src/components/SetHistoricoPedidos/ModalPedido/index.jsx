@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import authService from "../../../services/login/Auth.service";
+import pedidoService from "../../../services/pedido/Pedido.service";
+import produtoService from "../../../services/produto/Produto.service";
 import CardPedidoProduto from "../CardPedidoProduto/index";
 import styles from "./ModalPedido.module.css";
 
@@ -48,20 +49,15 @@ export default function ModalPedido({ pedido, usuarioUuid, onVerNotaFiscal }) {
     setError("");
 
     try {
-      // TODO: confirmar endereço e formato de retorno desse endpoint
-      const { data } = await authService.get(
-        `/item-pedido/${pedido.pedido_uuid}`,
-        { headers: { usuario_uuid: usuarioUuid } },
+      const data = await pedidoService.listarItensPedido(
+        pedido.pedido_uuid,
+        usuarioUuid,
       );
 
       const comImagem = await Promise.all(
         data.map(async (item) => {
           try {
-            const { data: imagemBlob } = await authService.get(
-              `/produto/picture/${item.id_produto}`,
-              { responseType: "blob" },
-            );
-            const url = URL.createObjectURL(imagemBlob);
+            const url = await produtoService.buscarImagem(item.id_produto);
             imagensUrlsRef.current.push(url);
             return { ...item, imagem: url };
           } catch {

@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import authService from "../../../services/login/Auth.service";
+import carrinhoService from "../../../services/carrinho/Carrinho.service";
 import styles from "./CardPedidoProduto.module.css";
 
 export default function CardPedidoProduto({ produto, usuarioUuid }) {
@@ -11,10 +11,7 @@ export default function CardPedidoProduto({ produto, usuarioUuid }) {
     };
 
     try {
-      // TODO: confirmar endereço desse endpoint
-      await authService.post("/carrinho", payload, {
-        headers: { usuario_uuid: usuarioUuid },
-      });
+      await carrinhoService.adicionarItem(payload, usuarioUuid);
     } catch {
       // TODO: feedback visual de erro ao adicionar no carrinho
     }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import authService from "../../services/login/Auth.service";
+import usuarioService from "../../services/usuario/Usuario.service";
+import pedidoService from "../../services/pedido/Pedido.service";
 import Navbar from "../../components/shared/Navbar/Navbar";
 import ModalPedido from "../../components/SetHistoricoPedidos/ModalPedido/index";
 import styles from "./HistoricoPedidos.module.css";
@@ -20,9 +21,9 @@ export default function HistoricoPedidos() {
   // dados do usuário vêm de GET /usuarios/me, mesmo padrão de Perfil/PerfilAdmin
   useEffect(() => {
     let active = true;
-    authService
-      .get("/usuarios/me")
-      .then(({ data }) => {
+    usuarioService
+      .buscarUsuarioLogado()
+      .then((data) => {
         if (active) setUser(data);
       })
       .catch(() => {});
@@ -40,10 +41,9 @@ export default function HistoricoPedidos() {
     setLoading(true);
     setError("");
 
-    authService
-      .get("/pedido", { headers: { usuario_uuid: teste123 } })
-      // .get('/pedido', { headers: { usuario_uuid: usuarioUuid } })
-      .then(({ data }) => {
+    pedidoService
+      .listarPedidos(usuarioUuid)
+      .then((data) => {
         if (active) setTodosPedidos(data);
       })
       .catch(() => {
@@ -86,9 +86,6 @@ export default function HistoricoPedidos() {
       <Navbar userName={user?.nome ?? ""} />
 
       <main className={styles.main}>
-        {/* Incluido um form para mock de teste na aplicação*/}
-
-        {/* */}
         <h2 className={styles.heading}>Histórico de Pedidos</h2>
 
         {error && (
